@@ -4,10 +4,12 @@ import { provinces, Province, STATUS_CONFIG } from './data/provinces';
 import ProvinceSelector from './components/ProvinceSelector';
 import WeatherCalendar from './components/WeatherCalendar';
 import ReverseLookup from './components/ReverseLookup';
+import DownloadModal from './components/DownloadModal';
 
 export default function Home() {
   const [selected, setSelected] = useState<Province | null>(null);
   const [view, setView] = useState<'browse' | 'lookup'>('browse');
+  const [showDownload, setShowDownload] = useState(false);
 
   const handleSelectById = (id: string) => {
     const p = provinces.find(x => x.id === id);
@@ -34,7 +36,15 @@ export default function Home() {
               <p className="text-xs text-teal-600">Lịch thời tiết du lịch 63 tỉnh thành Việt Nam</p>
             </div>
           </div>
-          <span className="text-xs text-gray-400 hidden sm:block">chuongchudu.com</span>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setShowDownload(true)}
+              className="flex items-center gap-2 bg-gradient-to-r from-teal-500 to-emerald-500 text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-sm hover:shadow-md transition-all"
+            >
+              📥 Tải cẩm nang PDF
+            </button>
+            <span className="text-xs text-gray-400 hidden sm:block">chuongchudu.com</span>
+          </div>
         </div>
       </header>
 
@@ -47,6 +57,12 @@ export default function Home() {
           <p className="text-gray-500 max-w-xl mx-auto text-sm sm:text-base">
             Tra cứu thời điểm lý tưởng để du lịch 63 tỉnh thành Việt Nam — thời tiết, lễ hội, nhiệt độ, mùa mưa bão theo từng tháng.
           </p>
+          <button
+            onClick={() => setShowDownload(true)}
+            className="mt-4 inline-flex items-center gap-2 bg-white border-2 border-teal-200 text-teal-700 text-sm font-semibold px-5 py-2.5 rounded-2xl shadow-sm hover:border-teal-400 hover:shadow-md transition-all"
+          >
+            📖 Tải cẩm nang du lịch theo mùa (PDF miễn phí)
+          </button>
         </div>
 
         {/* Tab switcher */}
@@ -131,21 +147,36 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Tips */}
+        {/* Download CTA banner */}
         <div className="bg-gradient-to-r from-teal-500 to-emerald-500 rounded-3xl p-6 text-white">
-          <h3 className="font-bold text-lg mb-3">💡 Mẹo du lịch theo mùa</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-            <div className="bg-white/20 rounded-xl p-3">🌸 <strong>Tháng 2–3:</strong> Hoa mận, hoa ban Tây Bắc đẹp nhất</div>
-            <div className="bg-white/20 rounded-xl p-3">🌾 <strong>Tháng 9–10:</strong> Ruộng bậc thang vàng óng Mù Cang Chải</div>
-            <div className="bg-white/20 rounded-xl p-3">🏖️ <strong>Tháng 3–7:</strong> Biển miền Trung mùa đẹp nhất</div>
-            <div className="bg-white/20 rounded-xl p-3">🌺 <strong>Tháng 12–4:</strong> Miền Tây, Nha Trang, Mũi Né đẹp nhất</div>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+              <h3 className="font-bold text-lg mb-1">📖 Cẩm nang du lịch Việt Nam theo mùa</h3>
+              <p className="text-sm text-white/80">14 trang · 63 tỉnh thành · Top điểm đến từng tháng · Hoàn toàn miễn phí</p>
+            </div>
+            <button
+              onClick={() => setShowDownload(true)}
+              className="flex-shrink-0 bg-white text-teal-700 font-bold text-sm px-6 py-3 rounded-2xl shadow-md hover:shadow-lg transition-all"
+            >
+              📥 Tải PDF miễn phí
+            </button>
           </div>
+        </div>
+
+        {/* Tips */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+          <div className="bg-white rounded-xl p-3 border border-gray-100 shadow-sm">🌸 <strong>Tháng 2–3:</strong> Hoa mận, hoa ban Tây Bắc đẹp nhất</div>
+          <div className="bg-white rounded-xl p-3 border border-gray-100 shadow-sm">🌾 <strong>Tháng 9–10:</strong> Ruộng bậc thang vàng óng Mù Cang Chải</div>
+          <div className="bg-white rounded-xl p-3 border border-gray-100 shadow-sm">🏖️ <strong>Tháng 3–7:</strong> Biển miền Trung mùa đẹp nhất</div>
+          <div className="bg-white rounded-xl p-3 border border-gray-100 shadow-sm">🌺 <strong>Tháng 12–4:</strong> Miền Tây, Nha Trang, Mũi Né đẹp nhất</div>
         </div>
       </main>
 
       <footer className="text-center py-8 text-xs text-gray-400">
         <p>Dữ liệu thời tiết dựa trên kinh nghiệm du lịch thực tế · Chuong Chudu © 2026</p>
       </footer>
+
+      {showDownload && <DownloadModal onClose={() => setShowDownload(false)} />}
     </div>
   );
 }
